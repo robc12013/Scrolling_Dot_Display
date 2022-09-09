@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Ticker Display</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="ticker.css">
+    <script src="chars.js" charset="utf-8" defer></script>
+    <script src="ticker.js" charset="utf-8" defer></script>
+</head>
+<body>
+    <div id="LEDTicker" class="LEDTicker"></div>
+    <button id="stopTickerButton">Stop Ticker</button>
+    <div id="inputWrap">
+        <label for="tickerMessage" style="color: #999999">Enter a message to display on the ticker!</label>
+        <input id="tickerMessage" name="tickerMessage" value="hello world"/>
+        <button id="updateTickerMessageButton">Update</button>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,31 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #202020;
+}
+
+.LEDTicker{
+    display: grid;
+    grid-template-columns: repeat(50, 1fr);
+    grid-template-rows: repeat(7,1fr);
+    width: fit-content;
+    height: fit-content;
+    margin: 20px;
+    padding: 10px 0px 10px 10px;
+    background-color: black;
+}
+
+.dot{
+    width: 12px;
+    height: 12px;
+    margin: 1px;
+    background-color: #111222;
+}
+.dotOn{
+    width: 12px;
+    height: 12px;
+    margin: 1px;
+    background-color: orange;
+}
