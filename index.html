@@ -10,12 +10,20 @@
     <script src="ticker.js" charset="utf-8" defer></script>
 </head>
 <body>
-    <div id="LEDTicker" class="LEDTicker"></div>
-    <button id="stopTickerButton">Stop Ticker</button>
-    <div id="inputWrap">
-        <label for="tickerMessage" style="color: #999999">Enter a message to display on the ticker!</label>
-        <input id="tickerMessage" name="tickerMessage" value="hello world"/>
-        <button id="updateTickerMessageButton">Update</button>
+    <div id="tickerAndControls">
+        <div id="LEDTicker" class="LEDTicker"></div>
+        <div id="messageConfigWrapper">
+            <label id="tickerMessageLabel" for="tickerMessage">Enter a message to display on the ticker:</label>
+            <input id="tickerMessageInput" name="tickerMessage" value="hello world"/>
+        </div>
+        <div id="lengthConfigWrapper">
+            <label id="tickerLengthLabel" for="tickerLength">Enter the dot length you want the display to be (10 - 500):</label>
+            <input id="tickerLength" name="tickerLength" value="50"/>
+        </div>
+        <div id="controls-1">
+            <button id="updateTickerMessageButton">Update Ticker</button>
+            <button id="stopTickerButton">Stop Ticker</button>
+        </div>
     </div>
     
 </body>

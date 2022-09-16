@@ -1,3 +1,7 @@
+:root{
+    --tickerDotLength: 50;
+}
+
 *{
     box-sizing: border-box;
 }
@@ -6,15 +10,34 @@ body{
     background-color: #202020;
 }
 
+#tickerAndControls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .LEDTicker{
     display: grid;
-    grid-template-columns: repeat(50, 1fr);
+    grid-template-columns: repeat(var(--tickerDotLength), 1fr);
     grid-template-rows: repeat(7,1fr);
-    width: fit-content;
+    width: min-content;
     height: fit-content;
     margin: 20px;
-    padding: 10px 0px 10px 10px;
+    padding: 10px;
     background-color: black;
+}
+
+#messageConfigWrapper{
+    margin: auto;
+    width: 75%;
+}
+#lengthConfigWrapper{
+    margin: auto;
+    width: 75%;
+}
+
+#controls-1 {
+    margin: 20px;
 }
 
 .dot{
@@ -28,4 +51,20 @@ body{
     height: 12px;
     margin: 1px;
     background-color: orange;
+}
+
+#tickerMessageLabel{
+    color: #aaaaaa;
+}
+#tickerLengthLabel{
+    color: #aaaaaa;
+}
+
+#tickerMessageInput{
+    width: 50%;
+}
+
+#updateTickerMessageButton{
+    display: block;
+    margin: auto;
 }

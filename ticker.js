@@ -1,5 +1,6 @@
 function createTickerDots() {
-    for (let i = 0; i < 350; i++) {
+    dots = [];
+    for (let i = 0; i < (tickerDotLength*7); i++) {
         LEDTicker.appendChild(document.createElement("div"));
         LEDTicker.lastChild.className = dotStyle;
         dots.push(LEDTicker.lastChild);
@@ -8,16 +9,16 @@ function createTickerDots() {
 
 function createMask() {
     for (let i = 1; i <= 7; i++) {
-        getDot(50,i).style = "width: 0px;";
+        getDot(tickerDotLength,i).style = "width: 0; margin: 0;";
     }
 }
 
 function getDot(x,y) {
     if (x < 1 || y < 1) {throw Error("Coordinates cannot be less than 1.")}
-    if (x > 50) {throw Error("X coordinate is out of range. Max is 50.");}
+    if (x > tickerDotLength) {throw Error("X coordinate is out of range. Max is (max)");}
     if (y > 7) {throw Error("Y coordinate is out of range. Max is 7.");}
-    const rows = [0,50,100,150,200,250,300];
-    dotElement = dots[rows[y-1]+(x-1)];
+    const rowStart = [0,tickerDotLength,tickerDotLength*2,tickerDotLength*3,tickerDotLength*4,tickerDotLength*5,tickerDotLength*6];
+    let dotElement = dots[rowStart[y-1]+(x-1)];
     return dotElement;
 }
 
@@ -35,14 +36,13 @@ function turnOff(element) {
 // The inner loop checks the state of the dot to the right.
 function shiftDots() {
     for (let y = 1; y <= 7; y++) {
-        for (let x = 1; x < 50; x++) {
+        for (let x = 1; x < tickerDotLength; x++) {
             if (getDot(x+1,y).className == dotOnStyle) {
                 turnOn(getDot(x,y));
             } else if (getDot(x+1,y).className == dotStyle) {
                 turnOff(getDot(x,y));
             }
         }
-        turnOff(getDot(50,y));
     }
 }
 
@@ -59,10 +59,10 @@ function verticalBinary(num) {
 function setVerticalLine(binArray) {
     for (let i = 0; i < 7; i++) {
         if (binArray[i] == "1"){
-        getDot(50,i+1).className = dotOnStyle;
+            getDot(tickerDotLength,i+1).className = dotOnStyle;
         }
         else if (binArray[i] == "0") {
-        getDot(50,i+1).className = dotStyle;
+            getDot(tickerDotLength,i+1).className = dotStyle;
         }
     }
 }
@@ -71,26 +71,25 @@ function printLine() {
     if (queue.length == queueCounter){
         return "Done printing queue.";
     }
+
     if (queue[queueCounter] == printCharSpace){
         printCharSpace();
-        printCounter++;
         queueCounter++;
     }
     else {
-        setVerticalLine(verticalBinary(queue[queueCounter][lineCounter]))
-        printCounter++;
-        lineCounter++;
+        setVerticalLine(verticalBinary(queue[queueCounter][verticalLine]))
+        verticalLine++;
     }
-    if (lineCounter == 5){
+
+    if (verticalLine == wordSpaceSize){
         queueCounter++;
-        lineCounter = 0;
+        verticalLine = 0;
     }
 }
 
 function printQueue(){
-    lineCounter = 0;
+    verticalLine = 0;
     queueCounter = 0;
-    printCounter = 0;
     printStatus = "";
     printInterval = setInterval(function(){
         printStatus = printLine();
@@ -123,8 +122,7 @@ function printCharSpace(){
 
 function updateQueue(){
     queue = [];
-    queueIndex = 0;
-    let newTickerMessage = tickerMessage.value.toLowerCase().split(" ");
+    let newTickerMessage = tickerMessageInput.value.toLowerCase().split(" ");
 
     for (let i = 0; i < newTickerMessage.length;i++){
         for (let j = 0; j < newTickerMessage[i].length;j++){
@@ -139,16 +137,8 @@ function updateQueue(){
     }
 }
 
-function updateTickerMessage(){
-    clearInterval(printInterval);
-    clearInterval(shiftInterval);
-    clearTicker();
-    updateQueue();
-    printQueue();
-}
-
 function clearTicker(){
-    for (let x = 1; x <= 50; x++){
+    for (let x = 1; x <= tickerDotLength; x++){
         for ( let y = 1; y <= 7; y++){
             turnOff(getDot(x,y));
         }
@@ -160,6 +150,35 @@ function stopTicker(){
     clearInterval(shiftInterval);
 }
 
+function updateTickerMessage(){
+    stopTicker();
+    updateTickerLength();
+    updateQueue();
+    printQueue();
+}
+
+function updateTickerLength(){
+    tickerDotLength = Number(tickerLength.value);
+    if (tickerDotLength < 10 || tickerDotLength > 500){
+        tickerLength.value = 50;
+        updateTickerLength();
+        updateQueue();
+        printQueue();
+        throw Error("Must be between 10 and 2000");
+    }
+    else{
+        tickerDotLength = Number(tickerLength.value)+1;
+    }
+    
+    messageGap = tickerDotLength-7;
+    document.documentElement.style.setProperty("--tickerDotLength", tickerDotLength);
+    while (LEDTicker.lastChild){
+        LEDTicker.removeChild(LEDTicker.lastChild);
+    }
+    createTickerDots();
+    createMask();
+}
+
 // MAIN
 updateTickerMessageButton.addEventListener("click",updateTickerMessage);
 stopTickerButton.addEventListener("click",stopTicker);
@@ -168,25 +187,17 @@ let dots = [];
 let shiftSpeed = 40;
 let printInterval = 0;
 let shiftInterval = 0;
-let lineCounter = 0;
+let verticalLine = 0;
 let queueCounter = 0;
-let printCounter = 0;
 let printStatus = "";
 let queue = [];
-let queueIndex = 0;
-let messageGap = 46;
 let wordSpaceSize = 5;
-
+let tickerDotLength = Number(tickerLength.value)+1;
+let messageGap = tickerDotLength-7;
+document.documentElement.style.setProperty("--tickerDotLength", tickerDotLength);
 let dotStyle = "dot";
 let dotOnStyle = "dotOn";
 
-createTickerDots();
-createMask();
+updateTickerLength();
 updateQueue();
 printQueue();
-
-
-
-
-
-
