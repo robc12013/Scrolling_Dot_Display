@@ -15,19 +15,23 @@ function createMask() {
 
 function getDot(x,y) {
     if (x < 1 || y < 1) {throw Error("Coordinates cannot be less than 1.")}
-    if (x > tickerDotLength) {throw Error("X coordinate is out of range. Max is (max)");}
+    if (x > tickerDotLength){
+        throw Error("X coordinate is out of range. Max is "+tickerDotLength);
+    }
     if (y > 7) {throw Error("Y coordinate is out of range. Max is 7.");}
-    const rowStart = [0,tickerDotLength,tickerDotLength*2,tickerDotLength*3,tickerDotLength*4,tickerDotLength*5,tickerDotLength*6];
-    let dotElement = dots[rowStart[y-1]+(x-1)];
+    const rowStarts = [0];
+    for (let i = 1; i < 7; i++){
+        rowStarts.push(tickerDotLength*i);
+    }
+    let dotElement = dots[rowStarts[y-1] + (x-1)];
     return dotElement;
 }
 
 function turnOn(element) {
-    element.className = dotOnStyle;
+    element.classList.add(dotOnStyle);
 }
-
 function turnOff(element) {
-    element.className = dotStyle;
+    element.classList.remove(dotOnStyle);
 }
 
 // Update the dots' state from left to right, top to bottom.
@@ -35,11 +39,11 @@ function turnOff(element) {
 // loops throught columns within those rows.
 // The inner loop checks the state of the dot to the right.
 function shiftDots() {
-    for (let y = 1; y <= 7; y++) {
-        for (let x = 1; x < tickerDotLength; x++) {
-            if (getDot(x+1,y).className == dotOnStyle) {
+    for (let x = 1; x < tickerDotLength; x++){
+        for (let y = 1; y <= 7;y++) {
+            if (getDot(x+1,y).className.includes(dotOnStyle)) {
                 turnOn(getDot(x,y));
-            } else if (getDot(x+1,y).className == dotStyle) {
+            } else if (!getDot(x+1,y).className.includes(dotOnStyle)) {
                 turnOff(getDot(x,y));
             }
         }
@@ -59,10 +63,10 @@ function verticalBinary(num) {
 function setVerticalLine(binArray) {
     for (let i = 0; i < 7; i++) {
         if (binArray[i] == "1"){
-            getDot(tickerDotLength,i+1).className = dotOnStyle;
+            turnOn(getDot(tickerDotLength,i+1));
         }
         else if (binArray[i] == "0") {
-            getDot(tickerDotLength,i+1).className = dotStyle;
+            turnOff(getDot(tickerDotLength,i+1));
         }
     }
 }
@@ -72,13 +76,16 @@ function printLine() {
         return "Done printing queue.";
     }
 
-    if (queue[queueCounter] == printCharSpace){
+    if (queue[queueCounter] == "printCharSpace"){
         printCharSpace();
         queueCounter++;
     }
     else {
-        setVerticalLine(verticalBinary(queue[queueCounter][verticalLine]))
+        let intTickerSegment = queue[queueCounter][verticalLine];
+        let binTickerSegment = verticalBinary(intTickerSegment);
+        setVerticalLine(binTickerSegment);
         verticalLine++;
+        console.log("print");
     }
 
     if (verticalLine == wordSpaceSize){
@@ -90,12 +97,11 @@ function printLine() {
 function printQueue(){
     verticalLine = 0;
     queueCounter = 0;
-    printStatus = "";
     printInterval = setInterval(function(){
-        printStatus = printLine();
+        let printStatus = printLine();
         if (printStatus == "Done printing queue."){
             clearInterval(printInterval);
-            spaceOutTickerAndRepeat();
+            spaceOutTickerAndPrint();
         }
         else{
             shiftDots();
@@ -103,46 +109,57 @@ function printQueue(){
     },shiftSpeed);
 }
 
-function spaceOutTickerAndRepeat(){
-    let counter = 0;
+function continuePrint(){
+    printInterval = setInterval(function(){
+        let printStatus = printLine();
+        if (printStatus == "Done printing queue."){
+            clearInterval(printInterval);
+            spaceOutTickerAndPrint();
+        }
+        else{
+            shiftDots();
+        }
+    },shiftSpeed);
+}
+
+function spaceOutTickerAndPrint(){
     shiftDots();
+    spaceCounter++;
     shiftInterval = setInterval(function(){
-        shiftDots();
-        counter++;
-        if (counter == messageGap) {
+        if (spaceCounter > messageGap) {
             clearInterval(shiftInterval);
+            spaceCounter = 0;
             printQueue();
+        }
+        else{
+            shiftDots();
+            spaceCounter++;
         }
     },shiftSpeed);
 }
 
 function printCharSpace(){
-    setVerticalLine(verticalBinary([0]));
+        setVerticalLine(verticalBinary([0]));
 }
 
 function updateQueue(){
     queue = [];
-    let newTickerMessage = tickerMessageInput.value.toLowerCase().split(" ");
-
+    let newTickerMessage = tickerMessageInput.innerText.toLowerCase().split(/\s/);
     for (let i = 0; i < newTickerMessage.length;i++){
+        if(newTickerMessage[i] == ""){
+            continue;
+        }
         for (let j = 0; j < newTickerMessage[i].length;j++){
             let indexOfLetter = charList.findIndex(letter => letter == newTickerMessage[i][j]);
             let letterToPrint = charList[indexOfLetter+1];
             queue.push(letterToPrint);
-            queue.push(printCharSpace);
+            queue.push(printCharSpace.name);
         }
-        for (let i = 0; i < wordSpaceSize; i++) {
-            queue.push(printCharSpace);
-        }
-    }
-}
-
-function clearTicker(){
-    for (let x = 1; x <= tickerDotLength; x++){
-        for ( let y = 1; y <= 7; y++){
-            turnOff(getDot(x,y));
+        for (let i = 0; i < wordSpaceSize-1; i++) {
+            queue.push(printCharSpace.name);
         }
     }
+    return newTickerMessage;
 }
 
 function stopTicker(){
@@ -150,54 +167,67 @@ function stopTicker(){
     clearInterval(shiftInterval);
 }
 
+function deleteAllDots(){
+    while (LEDTicker.lastChild){
+        LEDTicker.removeChild(LEDTicker.lastChild);
+    }
+}
+
 function updateTickerMessage(){
     stopTicker();
-    updateTickerLength();
+    deleteAllDots();
+    updateTickerLength(Number(tickerLengthInput.value));
+    createTickerDots();
+    createMask();
     updateQueue();
     printQueue();
 }
 
-function updateTickerLength(){
-    tickerDotLength = Number(tickerLength.value);
-    if (tickerDotLength < 10 || tickerDotLength > 500){
-        tickerLength.value = 50;
-        updateTickerLength();
-        updateQueue();
-        printQueue();
-        throw Error("Must be between 10 and 2000");
+function updateTickerLength(length){
+    if (length < 10){
+        tickerLengthInput.value = 10;
+        updateTickerMessage();
+        throw Error("Must be between 10 and 500");
+    }
+    if (length > 500){
+        tickerLengthInput.value = 500;
+        updateTickerMessage();
+        throw Error("Must be between 10 and 500");
     }
     else{
-        tickerDotLength = Number(tickerLength.value)+1;
+        tickerDotLength = length+1;
+        messageGap = tickerDotLength-6;
+        tickerLengthInput.value = length;
+        document.documentElement.style.setProperty("--tickerDotLength", tickerDotLength);
     }
-    
-    messageGap = tickerDotLength-7;
-    document.documentElement.style.setProperty("--tickerDotLength", tickerDotLength);
-    while (LEDTicker.lastChild){
-        LEDTicker.removeChild(LEDTicker.lastChild);
-    }
-    createTickerDots();
-    createMask();
+}
+
+function updateTickerSize(){
+    document.documentElement.style.setProperty("--dotSize",tickerSizeInput.value+"px");
+}
+
+function updateTickerSpeed(){
+    stopTicker();
+    shiftSpeed = Math.abs(tickerSpeedInput.value);
+    continuePrint();
 }
 
 // MAIN
-updateTickerMessageButton.addEventListener("click",updateTickerMessage);
+updateTickerButton.addEventListener("click",updateTickerMessage);
 stopTickerButton.addEventListener("click",stopTicker);
+tickerSizeInput.addEventListener("input",updateTickerSize);
+tickerSpeedInput.addEventListener("input",updateTickerSpeed);
 
-let dots = [];
-let shiftSpeed = 40;
-let printInterval = 0;
-let shiftInterval = 0;
-let verticalLine = 0;
-let queueCounter = 0;
-let printStatus = "";
-let queue = [];
-let wordSpaceSize = 5;
-let tickerDotLength = Number(tickerLength.value)+1;
-let messageGap = tickerDotLength-7;
-document.documentElement.style.setProperty("--tickerDotLength", tickerDotLength);
+let dots, printInterval, shiftInterval, verticalLine, queueCounter, 
+    queue, messageGap, shiftSpeed, tickerDotLength;
+
+let spaceCounter = 0;
+const wordSpaceSize = 5;
 let dotStyle = "dot";
 let dotOnStyle = "dotOn";
 
-updateTickerLength();
-updateQueue();
-printQueue();
+// Automatically create the ticker at an appropriate size for the screen.
+updateTickerLength(Math.floor(window.innerWidth/14)-5)
+updateTickerMessage();
+updateTickerSize();
+updateTickerSpeed();
