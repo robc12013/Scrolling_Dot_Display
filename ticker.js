@@ -85,7 +85,6 @@ function printLine() {
         let binTickerSegment = verticalBinary(intTickerSegment);
         setVerticalLine(binTickerSegment);
         verticalLine++;
-        console.log("print");
     }
 
     if (verticalLine == wordSpaceSize){
@@ -144,13 +143,14 @@ function printCharSpace(){
 
 function updateQueue(){
     queue = [];
-    let newTickerMessage = tickerMessageInput.innerText.toLowerCase().split(/\s/);
-    for (let i = 0; i < newTickerMessage.length;i++){
-        if(newTickerMessage[i] == ""){
+    let newTickerMessage = tickerMessageInput.innerText;
+    let messageAsList = newTickerMessage.toLowerCase().split(/\s/);
+    for (let i = 0; i < messageAsList.length;i++){
+        if(messageAsList[i] == ""){
             continue;
         }
-        for (let j = 0; j < newTickerMessage[i].length;j++){
-            let indexOfLetter = charList.findIndex(letter => letter == newTickerMessage[i][j]);
+        for (let j = 0; j < messageAsList[i].length;j++){
+            let indexOfLetter = charList.findIndex(letter => letter == messageAsList[i][j]);
             let letterToPrint = charList[indexOfLetter+1];
             queue.push(letterToPrint);
             queue.push(printCharSpace.name);
@@ -212,11 +212,69 @@ function updateTickerSpeed(){
     continuePrint();
 }
 
+function checkInputMessage(e){
+    if (/\W/.test(tickerMessageInput.innerText)){
+        console.log(e.key);
+    }
+    if (e.key == "Enter"){
+        updateTickerMessage();
+    }
+}
+
+function styleChange(e){
+    switch (e.target) {
+        case style1Button:
+            dotStyle = "dot";
+            dotOnStyle = "dotOn";
+            LEDTicker.className = "LEDTicker";
+            break;
+        case style2Button:
+            dotStyle = "dotStyle2";
+            dotOnStyle = "dotOnStyle2";
+            LEDTicker.className = "LEDTicker LEDTickerStyle2";
+            break;
+        case style3Button:
+            dotStyle = "dotStyle3";
+            dotOnStyle = "dotOnStyle3";
+            LEDTicker.className = "LEDTicker LEDTickerStyle3";
+            break;
+        case style4Button:
+            dotStyle = "dotStyle4";
+            dotOnStyle = "dotOnStyle4";
+            LEDTicker.className = "LEDTicker LEDTickerStyle4";
+            break;
+        default:
+            console.log("Unknown style.");
+    }
+
+    for (let i = 0; i < dots.length; i++){
+        if (dots[i].className.includes("On") === true){
+            dots[i].className = "dot "+dotStyle+" "+dotOnStyle;
+        }
+        else{
+            dots[i].className = "dot "+dotStyle;
+        }
+    }
+}
+
+// function checkInputLength(e){
+//     if (!Number.isInteger(Number(e.key)) && e.key != " "){
+//         console.log(e.key);
+//         e.preventDefault();
+//     }
+// }
+
 // MAIN
 updateTickerButton.addEventListener("click",updateTickerMessage);
 stopTickerButton.addEventListener("click",stopTicker);
 tickerSizeInput.addEventListener("input",updateTickerSize);
 tickerSpeedInput.addEventListener("input",updateTickerSpeed);
+tickerMessageInput.addEventListener("keydown",checkInputMessage);
+style1Button.addEventListener("click",styleChange);
+style2Button.addEventListener("click",styleChange);
+style3Button.addEventListener("click",styleChange);
+style4Button.addEventListener("click",styleChange);
+// tickerLengthInput.addEventListener("keydown",checkInputLength);
 
 let dots, printInterval, shiftInterval, verticalLine, queueCounter, 
     queue, messageGap, shiftSpeed, tickerDotLength;
@@ -226,8 +284,10 @@ const wordSpaceSize = 5;
 let dotStyle = "dot";
 let dotOnStyle = "dotOn";
 
+// const allowedKeys = [" ", "Backspace", "Shift", "Control"];
+
 // Automatically create the ticker at an appropriate size for the screen.
-updateTickerLength(Math.floor(window.innerWidth/14)-5)
+updateTickerLength(Math.floor(window.innerWidth/10)-5)
 updateTickerMessage();
 updateTickerSize();
 updateTickerSpeed();
