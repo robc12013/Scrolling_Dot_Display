@@ -2,7 +2,7 @@ function createTickerDots() {
     dots = [];
     for (let i = 0; i < (tickerDotLength*7); i++) {
         LEDTicker.appendChild(document.createElement("div"));
-        LEDTicker.lastChild.className = dotStyle;
+        LEDTicker.lastChild.className = "dot "+dotStyle;
         dots.push(LEDTicker.lastChild);
     }
 }
@@ -212,15 +212,6 @@ function updateTickerSpeed(){
     continuePrint();
 }
 
-function checkInputMessage(e){
-    if (/\W/.test(tickerMessageInput.innerText)){
-        console.log(e.key);
-    }
-    if (e.key == "Enter"){
-        updateTickerMessage();
-    }
-}
-
 function styleChange(e){
     switch (e.target) {
         case style1Button:
@@ -257,24 +248,97 @@ function styleChange(e){
     }
 }
 
-// function checkInputLength(e){
-//     if (!Number.isInteger(Number(e.key)) && e.key != " "){
-//         console.log(e.key);
-//         e.preventDefault();
-//     }
-// }
+// Check every character in the message field and show an error if there
+// is an invalid character.
+function messageInputChecking(){
+    let message = tickerMessageInput;
+    // loop through each character in the message and check if the character is 
+    // one of our valid characters.
+    for (let i=0; i<message.innerText.length; i++){
+        let validCounts = 0;
+        for (let j = 0; j<validMessageInputs.length; j++){
+            if (message.innerText[i].match(validMessageInputs[j])){
+                validCounts++;
+            }
+        }
+        // if contains no valid characters
+        if (validCounts == 0) {
+            showMessageError("Please only use letters and spaces.");
+            return false;
+        }
+    }
+    // if includes escape
+    if (message.innerText.includes("\\")){
+        showMessageError("Message cannot include backslash.");
+        return false;
+    }
+    // the message is empty if it contains a \n or nothing and no letters
+    if ((message.innerText.match(/\n/) || message.innerText == "") && !message.innerText.match(/[A-z]/)){
+        showMessageError("Message cannot be blank.");
+        return false;
+    }
+    
+    message.classList.remove("inputInvalid");
+    infoMessage.style.display = "none";
+    return true;
+}
+
+function lengthInputChecking(){
+    for (let i=0; i<tickerLengthInput.value.length;i++){
+        if (!tickerLengthInput.value[i].match(/\d/)){
+            showLengthError("Length must be a number.");
+            return false;
+        }
+    }
+
+    if (tickerLengthInput.value == ""){
+        showLengthError("Length cannot be blank.");
+        return false;
+    }
+    
+    if (tickerLengthInput.value < 10 || tickerLengthInput.value > 500){
+        showLengthError("Length must be 10 - 500, inclusive.");
+        return false;
+    }
+    tickerLengthInput.classList.remove("inputInvalid");
+    infoLength.style.display = "none";
+    return true;
+}
+
+function showMessageError(errorMessage){
+    tickerMessageInput.classList.add("inputInvalid");
+    updateTickerButton.setAttribute("disabled", "true");
+    infoMessage.style.display = "unset";
+    infoMessage.innerText = errorMessage;
+}
+
+function showLengthError(errorMessage){
+    tickerLengthInput.classList.add("inputInvalid");
+    updateTickerButton.setAttribute("disabled", "true");
+    infoLength.style.display = "unset";
+    infoLength.innerText = errorMessage;
+}
+
+function inputChecking(){
+    messageValid = messageInputChecking();
+    lengthValid = lengthInputChecking();
+    if (messageValid & lengthValid){
+        updateTickerButton.removeAttribute("disabled");
+    }
+}
 
 // MAIN
 updateTickerButton.addEventListener("click",updateTickerMessage);
 stopTickerButton.addEventListener("click",stopTicker);
 tickerSizeInput.addEventListener("input",updateTickerSize);
 tickerSpeedInput.addEventListener("input",updateTickerSpeed);
-tickerMessageInput.addEventListener("keydown",checkInputMessage);
 style1Button.addEventListener("click",styleChange);
 style2Button.addEventListener("click",styleChange);
 style3Button.addEventListener("click",styleChange);
 style4Button.addEventListener("click",styleChange);
-// tickerLengthInput.addEventListener("keydown",checkInputLength);
+
+tickerMessageInput.addEventListener("keyup",inputChecking);
+tickerLengthInput.addEventListener("keyup",inputChecking);
 
 let dots, printInterval, shiftInterval, verticalLine, queueCounter, 
     queue, messageGap, shiftSpeed, tickerDotLength;
@@ -284,7 +348,7 @@ const wordSpaceSize = 5;
 let dotStyle = "dot";
 let dotOnStyle = "dotOn";
 
-// const allowedKeys = [" ", "Backspace", "Shift", "Control"];
+const validMessageInputs = [/[A-z]/, " ", "\n", String.fromCharCode(160)];
 
 // Automatically create the ticker at an appropriate size for the screen.
 updateTickerLength(Math.floor(window.innerWidth/10)-5)

@@ -53,6 +53,12 @@ label{
     box-shadow: 0px 0px 0px 1px var(--cream),
                 0px 0px 10px 0px var(--cream);
 }
+.inputInvalid{
+    outline: none !important;
+    box-shadow: 0px 0px 0px 1px var(--alert),
+                0px 0px 10px 0px var(--alert) !important;
+}
+
 button{
     font-family: monospace;
     width: 175px;
@@ -69,6 +75,13 @@ button{
 button:hover{
     box-shadow: inset 0px 0px 3px 0px var(--orange),
                 0px 0px 10px 0px var(--cream);
+}
+button:disabled{
+    opacity: 0.3;
+}
+button:disabled:hover{
+    box-shadow: inset 0px 0px 3px 0px var(--olive), 
+                0px 0px 5px 0px black;
 }
 
 .LEDTicker{
@@ -123,10 +136,11 @@ button:hover{
     width: 75%;
     margin: auto;
 }
-#tickerMessageInput:invalid{
-    outline: none;
-    box-shadow: 0px 0px 0px 1px var(--alert),
-                0px 0px 10px 0px var(--alert);
+
+.alert{
+    display: none;
+    color: var(--alert);
+    text-align: center;
 }
 
 #tickerLengthLabel{
@@ -137,11 +151,6 @@ button:hover{
     width: 70px;
     margin: auto;
     text-align: center;
-}
-#tickerLengthInput:invalid{
-    outline: none;
-    box-shadow: 0px 0px 0px 1px var(--alert),
-                0px 0px 10px 0px var(--alert);
 }
 
 #controls-1 {
