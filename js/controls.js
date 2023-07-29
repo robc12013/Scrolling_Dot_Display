@@ -59,6 +59,8 @@ for (let stepPos = 0; stepPos < 101; stepPos+=(100/sliderSteps)) {
 	steps.push(stepPos);
 }
 
+let speeds = [200, 150, 100, 75, 50, 25, 10];
+
 // for (let item in notches.children) {
 // 	notches.children[item].style = `margin-left: ${100/sliderSteps}%`;
 // }
@@ -74,6 +76,10 @@ function moveSlider(event) {
 	let knobPos = steps[closestValue(steps,mouseX)];
 
 	innerSlider.style.width = knobPos + "%";
+
+	stopTicker();
+	tickerSpeed = speeds[steps.indexOf(knobPos)];
+	startTicker();
 
 }
 

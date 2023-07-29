@@ -7,7 +7,7 @@ let segments = [];
 let charSpace = intToBinaryArray(0);
 let segmentIndex = 0;
 let printInterval = 0;
-let tickerSpeed = 50; //Math.abs(tickerSpeedInput.value);
+let tickerSpeed = 75; //Math.abs(tickerSpeedInput.value);
 
 function createTicker() {
     dots = [];
