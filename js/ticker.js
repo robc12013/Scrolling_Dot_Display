@@ -3,6 +3,7 @@ function createTickerDots() {
     for (let i = 0; i < (tickerDotLength*7); i++) {
         LEDTicker.appendChild(document.createElement("div"));
         LEDTicker.lastChild.className = "dot "+dotStyle;
+        LEDTicker.lastChild.dataset.state = "off";
         dots.push(LEDTicker.lastChild);
     }
 }
@@ -29,9 +30,11 @@ function getDot(x,y) {
 
 function turnOn(element) {
     element.classList.add(dotOnStyle);
+    element.dataset.state = "on";
 }
 function turnOff(element) {
     element.classList.remove(dotOnStyle);
+    element.dataset.state = "off";
 }
 
 // Update the dots' state from left to right, top to bottom.
@@ -41,9 +44,9 @@ function turnOff(element) {
 function shiftDots() {
     for (let x = 1; x < tickerDotLength; x++){
         for (let y = 1; y <= 7;y++) {
-            if (getDot(x+1,y).className.includes(dotOnStyle)) {
+            if (getDot(x+1,y).dataset.state == "on") {
                 turnOn(getDot(x,y));
-            } else if (!getDot(x+1,y).className.includes(dotOnStyle)) {
+            } else {
                 turnOff(getDot(x,y));
             }
         }

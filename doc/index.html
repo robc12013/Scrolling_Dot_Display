@@ -5,9 +5,11 @@
     <title>Scrolling Dot Display</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="ticker.css">
-    <script src="chars.js" charset="utf-8"></script>
-    <script src="ticker.js" charset="utf-8" defer></script>
+    <link rel="stylesheet" type="text/css" href="../css/ticker.css">
+    <script src="../js/chars.js" charset="utf-8"></script>
+    <script src="../js/controls.js" charset="utf-8" defer></script>
+    <script src="../js/tickerManual.js" charset="utf-8" defer></script>
+    
 </head>
 <body>
     <div id="tickerAndControls">
@@ -26,6 +28,7 @@
         </div>
         <div class="inputWrapper" id="controls-1">
             <button id="stopTickerButton">Stop Ticker</button>
+            <button id="startTickerButton">Start Ticker</button>
             <button id="updateTickerButton">Update Ticker</button>
         </div>
         <div id="speedAndSizeContainer">
@@ -35,7 +38,14 @@
             </div>
             <div class="inputWrapperSmall" id="speedConfigWrapper">
                 <label id="tickerSpeedLabel">Speed:</label>
-                <input class="input" id="tickerSpeedInput" type="range" value="-60" min="-200" max="-10"/>
+                <div id="speedSlider">
+                  <div class="outerSlider">
+                      <div id="innerSlider" class="innerSlider" style="width: 0%;">
+                          <div id="sliderKnob" class="sliderKnob"></div>
+                      </div>
+                  </div>
+               </div>
+                <!-- <input class="input" id="tickerSpeedInput" type="range" value="-60" min="-200" max="0" step="10"/> -->
             </div>
         </div>
         <div class="inputWrapper" id="controls-2">

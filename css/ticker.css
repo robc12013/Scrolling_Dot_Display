@@ -12,6 +12,7 @@
     --orange: #ff7700;
     --olive: #353525;
     --alert: red;
+    --innerSliderWidth: 50%;
 }
 
 *{
@@ -73,8 +74,8 @@ button{
     text-shadow: 2px 2px 10px grey;
 }
 button:hover{
-    box-shadow: inset 0px 0px 3px 0px var(--orange),
-                0px 0px 10px 0px var(--cream);
+    box-shadow: inset 0px 0px 10px 0px var(--orange),
+                0px 0px 5px 0px var(--cream);
 }
 button:disabled{
     opacity: 0.3;
@@ -179,6 +180,8 @@ button:disabled:hover{
 }
 
 .dot{
+    /* transition-duration: 30ms; */
+    /* transition-property: background-color; */
     width: var(--dotSize);
     height: var(--dotSize);
     margin: 1px;
@@ -186,6 +189,8 @@ button:disabled:hover{
     background-color: #111222;
 }
 .dotOn{
+    /* transition-duration: 30ms; */
+    /* transition-property: all; */
     background-color: var(--orange);
     box-shadow: 0px 0px 15px 1px var(--orange);
 }
@@ -210,4 +215,61 @@ button:disabled:hover{
 }
 .dotOnStyle4{
     background-color: #111111;
+}
+
+.outerSlider {
+    margin: auto;
+    width: calc(100% - 15px);
+    height: 10px;
+    background-color: var(--grey);
+		box-shadow: inset 0px 0px 3px 0px var(--olive), 
+                0px 0px 3px 0px black;
+}
+
+#speedSlider:hover .outerSlider {
+	box-shadow: inset 0px 0px 3px 0px var(--olive),
+              0px 0px 3px 0px var(--cream);
+}
+#speedSlider:active .outerSlider {
+	box-shadow: inset 0px 0px 3px 0px var(--olive),
+              0px 0px 3px 0px var(--cream);
+}
+
+#speedSlider:hover .sliderKnob{
+	box-shadow: inset 0px 0px 5px 0px var(--orange),
+              0px 0px 5px 0px var(--cream);
+}
+#speedSlider:active .sliderKnob{
+	box-shadow: inset 0px 0px 5px 0px var(--orange),
+              0px 0px 5px 0px var(--cream);
+}
+
+.innerSlider {
+    width: var(--innerSliderWidth);
+    height: 10px;
+    background-color: var(--lightText);
+    max-width: 100%;
+    min-width: 0%;
+    /* margin-right: 15px; */
+    transition: width 50ms;
+		box-shadow: inset 0px 0px 3px 0px var(--olive), 
+                0px 0px 3px 0px black;
+}
+
+.sliderKnob {
+    top: -7px;
+    right: 8px;
+    position: relative;
+    margin-left: 100%;
+    width: 15px;
+    height: 24px;
+    background-color: var(--cream);
+    box-shadow: inset 0px 0px 3px 0px var(--olive), 
+                0px 0px 5px 0px black;
+}
+
+#speedSlider {
+	margin: auto;
+	padding: 15px 0;
+	width: 100%;
 }
