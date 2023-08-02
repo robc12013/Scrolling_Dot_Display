@@ -1,7 +1,7 @@
 :root{
     font-family: monospace;
     --tickerDotLength: 50;
-    --dotSize: 12px;
+    --dotSize: 10px;
     --tickerPadding: calc(var(--dotSize)*1.25);
     --tickerMargin: calc(var(--dotSize)*0.098);
     --purple: #281d28;
@@ -226,20 +226,20 @@ button:disabled:hover{
                 0px 0px 3px 0px black;
 }
 
-#speedSlider:hover .outerSlider {
+.slider:hover .outerSlider {
 	box-shadow: inset 0px 0px 3px 0px var(--olive),
               0px 0px 3px 0px var(--cream);
 }
-#speedSlider:active .outerSlider {
+.slider:active .outerSlider {
 	box-shadow: inset 0px 0px 3px 0px var(--olive),
               0px 0px 3px 0px var(--cream);
 }
 
-#speedSlider:hover .sliderKnob{
+.slider:hover .sliderKnob{
 	box-shadow: inset 0px 0px 5px 0px var(--orange),
               0px 0px 5px 0px var(--cream);
 }
-#speedSlider:active .sliderKnob{
+.slider:active .sliderKnob{
 	box-shadow: inset 0px 0px 5px 0px var(--orange),
               0px 0px 5px 0px var(--cream);
 }
@@ -251,7 +251,7 @@ button:disabled:hover{
     max-width: 100%;
     min-width: 0%;
     /* margin-right: 15px; */
-    transition: width 50ms;
+    transition: width 40ms;
 		box-shadow: inset 0px 0px 3px 0px var(--olive), 
                 0px 0px 3px 0px black;
 }
@@ -268,7 +268,7 @@ button:disabled:hover{
                 0px 0px 5px 0px black;
 }
 
-#speedSlider {
+.slider {
 	margin: auto;
 	padding: 15px 0;
 	width: 100%;

@@ -2,60 +2,67 @@
 
 <html>
 <head>
-    <title>Scrolling Dot Display</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../css/ticker.css">
-    <script src="../js/chars.js" charset="utf-8"></script>
-    <script src="../js/controls.js" charset="utf-8" defer></script>
-    <script src="../js/tickerManual.js" charset="utf-8" defer></script>
-    
+	<title>Scrolling Dot Display</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="../css/ticker.css">
+	
+	<script src="../js/Slider.js" charset="utf-8" defer></script>
+	<script src="../js/chars.js" charset="utf-8"></script>
+	<script src="../js/controls.js" charset="utf-8" defer></script>
+	<script src="../js/ticker.js" charset="utf-8" defer></script>
+
 </head>
 <body>
-    <div id="tickerAndControls">
-        <div id="LEDTickerContainer">
-            <div class="LEDTicker" id="LEDTicker"></div>
-        </div>
-        <div class="inputWrapper" id="messageConfigWrapper">
-            <label id="tickerMessageLabel">Enter a message to display on the ticker:</label>
-            <div class="input" id="tickerMessageInput" contenteditable>hello world</div>
-            <div class="alert" id="infoMessage"></div>
-        </div>
-        <div class="inputWrapper" id="lengthConfigWrapper">
-            <label id="tickerLengthLabel">How many LEDs wide do you want the ticker to be (10 - 500)?:</label>
-            <input class="input" id="tickerLengthInput" value="50" min="10" max="500"/>
-            <div class="alert" id="infoLength"></div>
-        </div>
-        <div class="inputWrapper" id="controls-1">
-            <button id="stopTickerButton">Stop Ticker</button>
-            <button id="startTickerButton">Start Ticker</button>
-            <button id="updateTickerButton">Update Ticker</button>
-        </div>
-        <div id="speedAndSizeContainer">
-            <div class="inputWrapperSmall" id="sizeConfigWrapper">
-                <label id="tickerSizeLabel">Size:</label>
-                <input class="input" id="tickerSizeInput" type="range" value="8" min="1" max="20"/>
-            </div>
-            <div class="inputWrapperSmall" id="speedConfigWrapper">
-                <label id="tickerSpeedLabel">Speed:</label>
-                <div id="speedSlider">
-                  <div class="outerSlider">
-                      <div id="innerSlider" class="innerSlider" style="width: 50%;">
-                          <div id="sliderKnob" class="sliderKnob"></div>
-                      </div>
-                  </div>
-               </div>
-                <!-- <input class="input" id="tickerSpeedInput" type="range" value="-60" min="-200" max="0" step="10"/> -->
-            </div>
-        </div>
-        <div class="inputWrapper" id="controls-2">
-            <button id="style1Button">Style 1</button>
-            <button id="style2Button">Style 2</button>
-            <button id="style3Button">Style 3</button>
-            <button id="style4Button">Style 4</button>
-        </div>
-        
-    </div>
-    
+	<div id="tickerAndControls">
+		<div id="LEDTickerContainer">
+			<div class="LEDTicker" id="LEDTicker"></div>
+		</div>
+		<div class="inputWrapper" id="messageConfigWrapper">
+			<label id="tickerMessageLabel">Enter a message to display on the ticker:</label>
+			<div class="input" id="tickerMessageInput" contenteditable>hello world</div>
+			<div class="alert" id="infoMessage"></div>
+		</div>
+		<div class="inputWrapper" id="lengthConfigWrapper">
+			<label id="tickerLengthLabel">How many LEDs wide do you want the ticker to be (10 - 500)?:</label>
+			<input class="input" id="tickerLengthInput" value="50" min="10" max="500"/>
+			<div class="alert" id="infoLength"></div>
+		</div>
+		<div class="inputWrapper" id="controls-1">
+			<button id="stopTickerButton">Stop Ticker</button>
+			<button id="startTickerButton">Start Ticker</button>
+			<button id="updateTickerButton">Update Ticker</button>
+		</div>
+		<div id="speedAndSizeContainer">
+			<div class="inputWrapperSmall" id="sizeConfigWrapper">
+				<label id="tickerSizeLabel">Size:</label>
+				<div id="sizeSlider" class="slider">
+					<div class="outerSlider">
+						<div class="innerSlider" style="width: 47.37%;">
+							<div class="sliderKnob"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="inputWrapperSmall" id="speedConfigWrapper">
+				<label id="tickerSpeedLabel">Speed:</label>
+				<div id="speedSlider" class="slider">
+					<div class="outerSlider">
+						<div class="innerSlider" style="width: 50%;">
+								<div class="sliderKnob"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="inputWrapper" id="controls-2">
+			<button id="style1Button">Style 1</button>
+			<button id="style2Button">Style 2</button>
+			<button id="style3Button">Style 3</button>
+			<button id="style4Button">Style 4</button>
+		</div>
+	</div>
+
 </body>
 </html>
