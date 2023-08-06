@@ -25,8 +25,8 @@ function startTicker(){
 }
 
 function stopTicker() {
-    clearInterval(printInterval);
-    printInterval = 0;
+  clearInterval(printInterval);
+  printInterval = 0;
 }
 
 function updateTickerSize(size) {

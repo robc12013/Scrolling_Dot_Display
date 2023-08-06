@@ -185,10 +185,13 @@ button:disabled:hover{
     width: var(--dotSize);
     height: var(--dotSize);
     margin: 1px;
+}
+
+.dotStyle1{
     border-radius: 50%;
     background-color: #111222;
 }
-.dotOn{
+.dotOnStyle1{
     /* transition-duration: 30ms; */
     /* transition-property: all; */
     background-color: var(--orange);
