@@ -8,9 +8,6 @@ class Slider {
     this.updateValueFunction = updateValueFunction;
     this.sliderValue;
 
-		this.sliderWidth = Number(window.getComputedStyle(element).width.slice(0,-2));
-		this.sliderStart = Math.floor(element.getBoundingClientRect().x);
-
 		this.steps = [];
 		for (let stepPos = 0; stepPos < 101; stepPos+=(100/numOfSteps)) {
 			this.steps.push(stepPos.toFixed(2));
@@ -28,6 +25,14 @@ class Slider {
     this.element.addEventListener("mousedown", this.#grabKnob.bind(this));
 	}
 
+  get #width() {
+    return Number(window.getComputedStyle(this.element).width.slice(0,-2));
+  }
+
+  get #start() {
+    return Math.floor(this.element.getBoundingClientRect().x + window.scrollX);
+  }
+
   #moveSliderListener = this.#moveSlider.bind(this);
   #releaseKnobListener = this.#releaseKnob.bind(this);
 
@@ -43,7 +48,7 @@ class Slider {
 			return undefined;
 		}
 
-    let mouseX = (((mouseEvent.clientX - this.sliderStart) / (this.sliderWidth)) * 100).toFixed(2);
+    let mouseX = (((mouseEvent.pageX - this.#start) / (this.#width)) * 100).toFixed(2);
     let knobPos = this.steps[Slider.#closestValue(this.steps,mouseX)];
 
     // If the slider value is different than it was before, update the value.

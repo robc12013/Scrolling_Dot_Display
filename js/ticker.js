@@ -5,11 +5,12 @@ class Ticker {
   #segments = [];
   #segmentIndex = 0;
   #charSpace = this.#intToBinaryArray(0);
+  #style = document.documentElement.style;
 
   constructor(element, length, speed, size, message) {
     this.element = element;
     this.length = length+1;
-    style.setProperty("--tickerDotLength",this.length)
+    this.#style.setProperty("--tickerDotLength",this.length)
     this.speed = speed;
     this.size = size;
     this.message = message;
@@ -54,16 +55,19 @@ class Ticker {
   }
 
   stopTicker() {
-
+    clearInterval(this.#printInterval);
+    this.#printInterval = 0;
   }
 
   #shiftDots() {
     for (let x = 1; x < this.length; x++){
       for (let y = 1; y <= Ticker.#height; y++) {
-        if (this.getDot(x+1,y).dataset.state == "on") {
-          this.turnOn(this.getDot(x,y));
-        } else {
-          this.turnOff(this.getDot(x,y));
+        let currentDot = this.getDot(x,y);
+        let nextDot = this.getDot(x+1,y);
+        if (nextDot.dataset.state == "on") {
+          this.turnOn(currentDot);
+        } else if (nextDot.dataset.state == "off" && currentDot.dataset.state == "on") {
+          this.turnOff(currentDot);
         }
       }
     }
@@ -74,8 +78,7 @@ class Ticker {
       let dot = this.getDot(this.length, row + 1)
       if (binArray[row] == "1"){
         this.turnOn(dot);
-      }
-      else if (binArray[row] == "0") {
+      } else if (binArray[row] == "0") {
         this.turnOff(dot);
       }
     }
