@@ -12,6 +12,7 @@
 	<script src="../js/chars.js" charset="utf-8"></script>
 	<script src="../js/Ticker.js" charset="utf-8" defer></script>
 	<script src="../js/controls.js" charset="utf-8" defer></script>
+	<script src="../js/errorChecking.js" charset="utf-8" defer></script>
 
 </head>
 <body>
@@ -39,7 +40,7 @@
 				<label id="tickerSizeLabel">Size:</label>
 				<div id="sizeSlider" class="slider">
 					<div class="outerSlider">
-						<div class="innerSlider" style="width: 47.37%;">
+						<div class="innerSlider" style="width: 50.00%;">
 							<div class="sliderKnob"></div>
 						</div>
 					</div>
@@ -49,15 +50,15 @@
 				<label id="tickerSpeedLabel">Speed:</label>
 				<div id="speedSlider" class="slider">
 					<div class="outerSlider">
-						<div class="innerSlider" style="width: 50%;">
+						<div class="innerSlider" style="width: 50.00%;">
 								<div class="sliderKnob"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="inputWrapper" id="controls-2">
-			<button id="style1Button">Style 1</button>
+		<div id="controls-2" class="inputWrapper radio" >
+			<button id="style1Button" class="selected">Style 1</button>
 			<button id="style2Button">Style 2</button>
 			<button id="style3Button">Style 3</button>
 			<button id="style4Button">Style 4</button>

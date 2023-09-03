@@ -1,12 +1,12 @@
 class Slider {
-  constructor(element, min, max, numOfSteps, updateValueFunction, 
+  constructor(element, min, max, numOfSteps, valueCallback, 
               options = {"reverseScale": false}) {
 		this.element = element;
 		this.min = min;
 		this.max = max;
 		this.numOfSteps = numOfSteps;
-    this.updateValueFunction = updateValueFunction;
-    this.sliderValue;
+    this.valueCallback = valueCallback;
+    this.innerSlider = this.element.querySelector(".innerSlider");
 
 		this.steps = [];
 		for (let stepPos = 0; stepPos < 101; stepPos+=(100/numOfSteps)) {
@@ -14,9 +14,11 @@ class Slider {
 		}
 
     this.values = [];
-    for (let value = min; value < max+1; value+=((max-min)/numOfSteps)) {
+    for (let value = min; value <= max; value+=((max-min)/numOfSteps)) {
       this.values.push(value.toFixed(2));
     }
+
+    this.value = this.values[this.steps.indexOf(Number(this.innerSlider.style.width.slice(0,-1)).toFixed(2))];
 
     if (options["reverseScale"]) {
       this.values.reverse();
@@ -33,17 +35,18 @@ class Slider {
     return Math.floor(this.element.getBoundingClientRect().x + window.scrollX);
   }
 
-  #moveSliderListener = this.#moveSlider.bind(this);
+  #moveSliderListener = this.#updateValue.bind(this);
   #releaseKnobListener = this.#releaseKnob.bind(this);
 
   #grabKnob(mouseDownEvent) {
-    this.#moveSlider(mouseDownEvent);
+    this.#updateValue(mouseDownEvent);
 
     document.addEventListener("mousemove", this.#moveSliderListener);
     document.addEventListener("mouseup", this.#releaseKnobListener);
   }
 
-  #moveSlider(mouseEvent) {
+  #updateValue(mouseEvent) {
+    mouseEvent.preventDefault();
 		if (mouseEvent.movementY != 0){
 			return undefined;
 		}
@@ -54,10 +57,10 @@ class Slider {
     // If the slider value is different than it was before, update the value.
     // Meaning, only update the value if the slider has reached the next "step"
     // and not just everytime a move event occurs.
-    if (this.sliderValue != this.values[this.steps.indexOf(knobPos)]) {
-      this.sliderValue = this.values[this.steps.indexOf(knobPos)];
-      this.element.querySelector(".innerSlider").style.width = knobPos + "%";
-      this.updateValueFunction(this.values[this.steps.indexOf(knobPos)]);
+    if (this.value != this.values[this.steps.indexOf(knobPos)]) {
+      this.value = this.values[this.steps.indexOf(knobPos)];
+      this.innerSlider.style.width = knobPos + "%";
+      this.valueCallback(this.value);
     }
     
 	}

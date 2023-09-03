@@ -7,15 +7,16 @@ class Ticker {
   #charSpace = this.#intToBinaryArray(0);
   #style = document.documentElement.style;
 
-  constructor(element, length, speed, size, message) {
+  constructor(element, length, speed, size, message, options = {dotStyle: "dotStyle1", dotOnStyle: "dotOnStyle1"}) {
     this.element = element;
     this.length = length+1;
     this.#style.setProperty("--tickerDotLength",this.length)
     this.speed = speed;
     this.size = size;
+    this.#style.setProperty("--dotSize",this.size+"px");
     this.message = message;
-    this.dotStyle = "dotStyle1";
-    this.dotOnStyle = "dotOnStyle1";
+    this.dotStyle = options.dotStyle;
+    this.dotOnStyle = options.dotOnStyle;
 
     for (let row = 0; row < Ticker.#height; row++){
       let dotRow = [];
@@ -127,118 +128,66 @@ class Ticker {
     element.dataset.state = "off";
   }
 
-  static createTicker() {
+  changeStyle(event) {
+    const styleButtons = document.querySelectorAll(".radio button");
+    for (let button of styleButtons) {
+      button.classList.remove("selected");
+    }
+    event.target.classList.add("selected");
+
+    switch (event.target) {
+      case style1Button:
+        this.dotStyle = "dotStyle1";
+        this.dotOnStyle = "dotOnStyle1";
+        this.element.className = "LEDTicker";
+        break;
+      case style2Button:
+        this.dotStyle = "dotStyle2";
+        this.dotOnStyle = "dotOnStyle2";
+        this.element.className = "LEDTicker LEDTickerStyle2";
+        break;
+      case style3Button:
+        this.dotStyle = "dotStyle3";
+        this.dotOnStyle = "dotOnStyle3";
+        this.element.className = "LEDTicker LEDTickerStyle3";
+        break;
+      case style4Button:
+        this.dotStyle = "dotStyle4";
+        this.dotOnStyle = "dotOnStyle4";
+        this.element.className = "LEDTicker LEDTickerStyle4";
+        break;
+      default:
+        console.log("Unknown style.");
+    }
+
+
+    for (let row of this.dotRows) {
+      for (let dot of row){
+        // if (dot.dataset.state =)
+        if (dot.dataset.state == "on") {
+          dot.className = `dot ${this.dotStyle} ${this.dotOnStyle}`;
+        } else {
+          dot.className = `dot ${this.dotStyle}`;
+        }
+      }
+    }
+
+    // for (let i = 0; i < dots.length; i++){
+    //   if (dots[i].className.includes("On") === true) {
+    //     dots[i].className = "dot "+dotStyle+" "+dotOnStyle;
+    //   }
+    //   else {
+    //     dots[i].className = "dot "+dotStyle;
+    //   }
+    // }
 
   }
-  static deleteTicker() {
-
+  
+  deleteTicker() {
+    this.stopTicker();
+    while (this.element.lastChild) {
+      this.element.removeChild(this.element.lastChild)
+    }
   }
 
 }
-
-
-// let dots;
-// let rows = [0];
-// let tickerDotLength = 50;
-// let dotStyle = "dot";
-// let dotOnStyle = "dotOn";
-// let segments = [];
-// let charSpace = intToBinaryArray(0);
-// let segmentIndex = 0;
-// let printInterval = 0;
-// let tickerSpeed = 80; //Math.abs(tickerSpeedInput.value);
-
-// function createTicker() {
-//   dots = [];
-//   for (let i = 0; i < (tickerDotLength*7); i++) {
-//     LEDTicker.appendChild(document.createElement("div"));
-//     LEDTicker.lastChild.className = "dot "+dotStyle;
-//     LEDTicker.lastChild.dataset.state = "off";
-//     dots.push(LEDTicker.lastChild);
-//   }
-//   // Set the first dot of each row into the rows array.
-//   for (let i = 1; i < 7; i++){
-//     rows.push(tickerDotLength*i);
-//   }
-//   // Set the right most column of dots to be invisible so it can
-//   // be used to queue char segments without the user seeing.
-//   for (let i = 1; i <= 7; i++) {
-//     getDot(tickerDotLength,i).style = "width: 0; margin: 0;";
-//   }
-// }
-
-// // function getDot(x,y) {
-// //   return dots[rows[y-1] + (x-1)];
-// // }
-
-// function turnOn(element) {
-//   element.classList.add(dotOnStyle);
-//   element.dataset.state = "on";
-// }
-// function turnOff(element) {
-//   element.classList.remove(dotOnStyle);
-//   element.dataset.state = "off";
-// }
-
-// // Update the dots' state from left to right, top to bottom.
-// // The outer for loop loops through rows, the inner for loop
-// // loops throught columns within those rows.
-// // The inner loop checks the state of the dot to the right.
-// function shiftDots() {
-//   for (let x = 1; x < tickerDotLength; x++){
-//     for (let y = 1; y <= 7;y++) {
-//       if (getDot(x+1,y).dataset.state == "on") {
-//         turnOn(getDot(x,y));
-//       } else {
-//         turnOff(getDot(x,y));
-//       }
-//     }
-//   }
-// }
-
-// // Input a number from 0 - 127 and return a 7 element array of that number in binary.
-// function intToBinaryArray(num) {
-//   if (num > 127) {throw Error("Max is 127.");}
-//   if (num < 0) {throw Error("Min is 0.");}
-//   let bin = num.toString(2);
-//   let paddedBin = bin.padStart(7,"0");
-//   return paddedBin.split("");
-// }
-
-// // Input a 7 element binary array and the 1's will turn on the corresponding dots.
-// function setVerticalLine(binArray) {
-//   for (let i = 0; i < 7; i++) {
-//     if (binArray[i] == "1"){
-//       turnOn(getDot(tickerDotLength,i+1));
-//     }
-//     else if (binArray[i] == "0") {
-//       turnOff(getDot(tickerDotLength,i+1));
-//     }
-//   }
-// }
-
-// function convertToSegments(message) {
-//   // Reset the segments.
-//   segments = [];
-//   // Populate segments array based on characters in message.
-//   for (let char of message){
-//     for (let segment in characters[char.toLowerCase()]){
-//       segments.push(intToBinaryArray(characters[char.toLowerCase()][segment]));
-//     }
-//     segments.push(charSpace);
-//   }
-//   // Add a full ticker length space to the message.
-//   for (let i = 0; i < tickerDotLength; i++){
-//     segments.push(charSpace);
-//   }
-// }
-
-// function printNextSegment() {
-//   setVerticalLine(segments[segmentIndex]);
-//   shiftDots();
-// }
-
-// MAIN
-// createTicker();
-// convertToSegments("Hello World");
-// startTicker();
