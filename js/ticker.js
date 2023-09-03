@@ -160,10 +160,8 @@ class Ticker {
         console.log("Unknown style.");
     }
 
-
     for (let row of this.dotRows) {
       for (let dot of row){
-        // if (dot.dataset.state =)
         if (dot.dataset.state == "on") {
           dot.className = `dot ${this.dotStyle} ${this.dotOnStyle}`;
         } else {
@@ -171,16 +169,6 @@ class Ticker {
         }
       }
     }
-
-    // for (let i = 0; i < dots.length; i++){
-    //   if (dots[i].className.includes("On") === true) {
-    //     dots[i].className = "dot "+dotStyle+" "+dotOnStyle;
-    //   }
-    //   else {
-    //     dots[i].className = "dot "+dotStyle;
-    //   }
-    // }
-
   }
   
   deleteTicker() {
