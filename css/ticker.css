@@ -31,7 +31,9 @@ body{
 #LEDTickerContainer{
   display: flex;
   align-items: center;
-  height: 214px;
+  height: 170px;
+  overflow-x: auto;
+  margin-bottom: 10px;
 }
 
 label{
@@ -73,16 +75,16 @@ button{
               0px 0px 5px 0px black;
   text-shadow: 2px 2px 10px grey;
 }
-button:hover{
-  box-shadow: 0px 0px 5px 0px var(--cream);
-}
+
 button:disabled{
   opacity: 0.3;
 }
-button:disabled:hover{
-  box-shadow: inset 0px 0px 3px 0px var(--olive), 
-              0px 0px 5px 0px black;
+
+#controls-2 button{
+  font-size: 1.3rem;
 }
+
+
 
 .selected {
   box-shadow: inset 0px 0px 10px 0px var(--orange),
@@ -112,9 +114,9 @@ button:disabled:hover{
 .inputWrapper{
   display: flex;
   flex-direction: column;
-  margin: 10px auto;
-  width: 95%;
-  min-width: 240px;
+  margin: 5px auto;
+  width: 100%;
+  min-width: 350px;
   max-width: 730px;
   height: auto;
   background-color: var(--purple);
@@ -161,6 +163,12 @@ button:disabled:hover{
 #controls-1 {
   flex-direction: row;
 }
+
+#controls-1 button:active {
+  box-shadow: inset 0px 0px 10px 0px var(--orange),
+              0px 0px 5px 0px var(--cream);
+}
+
 #stopTickerButton{
   margin-right: auto;
 }
@@ -171,12 +179,12 @@ button:disabled:hover{
 #speedAndSizeContainer{
   display: flex;
   flex-direction: row;
-  margin: 10px auto;
-  width: 95%;
-  min-width: 240px;
+  margin: 5px auto;
+  width: 100%;
+  min-width: 350px;
   max-width: 730px;
   height: auto;
-  gap: 20px;
+  gap: 10px;
 }
 
 #controls-2{
@@ -233,23 +241,7 @@ button:disabled:hover{
               0px 0px 3px 0px black;
 }
 
-.slider:hover .outerSlider {
-  box-shadow: inset 0px 0px 3px 0px var(--olive),
-            0px 0px 3px 0px var(--cream);
-}
-.slider:active .outerSlider {
-  box-shadow: inset 0px 0px 3px 0px var(--olive),
-            0px 0px 3px 0px var(--cream);
-}
 
-.slider:hover .sliderKnob{
-  box-shadow: inset 0px 0px 5px 0px var(--orange),
-              0px 0px 5px 0px var(--cream);
-}
-.slider:active .sliderKnob{
-	box-shadow: inset 0px 0px 5px 0px var(--orange),
-              0px 0px 5px 0px var(--cream);
-}
 
 .innerSlider {
   width: var(--innerSliderWidth);
@@ -279,4 +271,23 @@ button:disabled:hover{
 	margin: auto;
 	padding: 15px 0;
 	width: 100%;
+}
+
+@media (hover: hover) {
+  button:hover{
+    box-shadow: 0px 0px 5px 0px var(--cream);
+  }
+  button:disabled:hover{
+    box-shadow: inset 0px 0px 3px 0px var(--olive), 
+                0px 0px 5px 0px black;
+  }
+
+  .slider:hover .outerSlider {
+    box-shadow: inset 0px 0px 3px 0px var(--olive),
+              0px 0px 3px 0px var(--cream);
+  }
+  .slider:hover .sliderKnob {
+    box-shadow: inset 0px 0px 5px 0px var(--orange),
+                0px 0px 5px 0px var(--cream);
+  }
 }

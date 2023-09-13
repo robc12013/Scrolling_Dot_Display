@@ -25,6 +25,7 @@ class Slider {
     }
 
     this.element.addEventListener("mousedown", this.#grabKnob.bind(this));
+    this.element.addEventListener("touchstart", this.#grabKnob.bind(this));
 	}
 
   get #width() {
@@ -38,21 +39,34 @@ class Slider {
   #moveSliderListener = this.#updateValue.bind(this);
   #releaseKnobListener = this.#releaseKnob.bind(this);
 
-  #grabKnob(mouseDownEvent) {
-    this.#updateValue(mouseDownEvent);
+  #grabKnob(grabStartEvent) {
+    this.#updateValue(grabStartEvent);
 
     document.addEventListener("mousemove", this.#moveSliderListener);
     document.addEventListener("mouseup", this.#releaseKnobListener);
+
+    document.addEventListener("touchmove", this.#moveSliderListener);
+    document.addEventListener("touchend", this.#releaseKnobListener);
   }
 
-  #updateValue(mouseEvent) {
-    mouseEvent.preventDefault();
-		if (mouseEvent.movementY != 0){
-			return undefined;
-		}
+  #updateValue(grabEvent) {
+    grabEvent.preventDefault();
+    // if (grabEvent.movementY != 0){
+		// 	return undefined;
+		// }
 
-    let mouseX = (((mouseEvent.pageX - this.#start) / (this.#width)) * 100).toFixed(2);
-    let knobPos = this.steps[Slider.#closestValue(this.steps,mouseX)];
+    let grabEventPageX;
+
+    if (grabEvent.type == "touchstart" || grabEvent.type == "touchmove") {
+      grabEventPageX = grabEvent.touches["0"].pageX;
+    }
+
+    if (grabEvent.type == "mousedown" || grabEvent.type == "mousemove") {
+      grabEventPageX = grabEvent.pageX; 
+    }
+
+    let grabX = (((grabEventPageX - this.#start) / (this.#width)) * 100).toFixed(2);
+    let knobPos = this.steps[Slider.#closestValue(this.steps,grabX)];
 
     // If the slider value is different than it was before, update the value.
     // Meaning, only update the value if the slider has reached the next "step"
@@ -68,6 +82,9 @@ class Slider {
   #releaseKnob() {
     document.removeEventListener("mousemove", this.#moveSliderListener);
     document.removeEventListener("mouseup", this.#releaseKnobListener);
+
+    document.removeEventListener("touchmove", this.#moveSliderListener);
+    document.removeEventListener("touchend", this.#releaseKnobListener);
   }
 
 	get showSliderDetail() {

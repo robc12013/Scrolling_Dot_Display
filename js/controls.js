@@ -1,24 +1,32 @@
-let tickerMessageInput = document.getElementById("tickerMessageInput");
-let tickerLengthInput = document.getElementById("tickerLengthInput");
-
-let initialTickerLength = Math.floor(window.innerWidth/10) - 5;
-tickerLengthInput.value = initialTickerLength;
+const tickerMessageInput = document.getElementById("tickerMessageInput");
+const tickerLengthInput = document.getElementById("tickerLengthInput");
+const initialTickerLength = Math.floor(window.innerWidth/9.6) - 6;
+const stopTickerButton = document.getElementById("stopTickerButton");
+const startTickerButton = document.getElementById("startTickerButton");
+const updateTickerButton = document.getElementById("updateTickerButton");
+const style = document.documentElement.style;
 
 const sizeSlider = new Slider(document.getElementById("sizeSlider"), 4, 12, 8, updateTickerSize);
 const speedSlider = new Slider(document.getElementById("speedSlider"), 10, 150, 6, updateTickerSpeed, {"reverseScale": true});
 
+tickerLengthInput.value = initialTickerLength;
+
 let ledTicker1 = new Ticker(LEDTicker, initialTickerLength, Number(speedSlider.value), Number(sizeSlider.value), tickerMessageInput.innerText);
 
-stopTickerButton.addEventListener("click",ledTicker1.stopTicker.bind(ledTicker1));
-startTickerButton.addEventListener("click",ledTicker1.startTicker.bind(ledTicker1));
 updateTickerButton.addEventListener("click",updateTickerMessage);
 
-style1Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-style2Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-style3Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-style4Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
+function updateButtonListeners() {
+	stopTickerButton.addEventListener("click",ledTicker1.stopTicker.bind(ledTicker1));
+	startTickerButton.addEventListener("click",ledTicker1.startTicker.bind(ledTicker1));
 
-const style = document.documentElement.style;
+	const styleButtons = document.querySelectorAll(".radio button");
+	for (let button of styleButtons){
+		button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
+		button.addEventListener("tocuhstart",ledTicker1.changeStyle.bind(ledTicker1));
+	}
+}
+
+updateButtonListeners();
 
 function updateTickerSize(size) {
 	style.setProperty("--dotSize",size+"px");
@@ -34,10 +42,5 @@ function updateTickerMessage(message) {
 	ledTicker1.deleteTicker();
 	ledTicker1 = new Ticker(LEDTicker, Number(tickerLengthInput.value), Number(speedSlider.value), Number(sizeSlider.value), 
 	tickerMessageInput.innerText, {dotStyle: ledTicker1.dotStyle, dotOnStyle: ledTicker1.dotOnStyle});
-	stopTickerButton.addEventListener("click",ledTicker1.stopTicker.bind(ledTicker1));
-	startTickerButton.addEventListener("click",ledTicker1.startTicker.bind(ledTicker1));
-	style1Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-	style2Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-	style3Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
-	style4Button.addEventListener("click",ledTicker1.changeStyle.bind(ledTicker1));
+	updateButtonListeners();
 }
