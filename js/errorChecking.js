@@ -9,10 +9,10 @@ function messageInputChecking(){
   let message = tickerMessageInput;
   // loop through each character in the message and check if the character is 
   // one of our valid characters.
-  for (let i=0; i<message.innerText.length; i++){
+  for (let i=0; i<message.value.length; i++){
       let validCounts = 0;
       for (let j = 0; j<validMessageInputs.length; j++){
-          if (message.innerText[i].match(validMessageInputs[j])){
+          if (message.value[i].match(validMessageInputs[j])){
               validCounts++;
           }
       }
@@ -23,12 +23,12 @@ function messageInputChecking(){
       }
   }
   // if includes escape
-  if (message.innerText.includes("\\")){
+  if (message.value.includes("\\")){
       showMessageError("Message cannot include backslash.");
       return false;
   }
   // the message is empty if it contains a \n or nothing and no letters
-  if ((message.innerText.match(/\n/) || message.innerText == "") && !message.innerText.match(/[A-z]/)){
+  if ((message.value.match(/\n/) || message.value == "") && !message.value.match(/[A-z]/)){
       showMessageError("Message cannot be blank.");
       return false;
   }
@@ -62,14 +62,12 @@ function lengthInputChecking(){
 
 function showMessageError(errorMessage){
   tickerMessageInput.classList.add("inputInvalid");
-  updateTickerButton.setAttribute("disabled", "true");
   infoMessage.style.display = "unset";
   infoMessage.innerText = errorMessage;
 }
 
 function showLengthError(errorMessage){
   tickerLengthInput.classList.add("inputInvalid");
-  updateTickerButton.setAttribute("disabled", "true");
   infoLength.style.display = "unset";
   infoLength.innerText = errorMessage;
 }
@@ -77,7 +75,12 @@ function showLengthError(errorMessage){
 function inputChecking(){
   messageValid = messageInputChecking();
   lengthValid = lengthInputChecking();
-  if (messageValid & lengthValid){
-      updateTickerButton.removeAttribute("disabled");
+  if (messageValid && lengthValid) {
+    tickerMessageInput.addEventListener("change",updateTickerMessage);
+    tickerLengthInput.addEventListener("change",updateTickerMessage);
+  } else {
+    tickerMessageInput.removeEventListener("change",updateTickerMessage);
+    tickerLengthInput.removeEventListener("change",updateTickerMessage);
   }
+
 }

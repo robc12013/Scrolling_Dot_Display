@@ -6,7 +6,9 @@ class Slider {
 		this.max = max;
 		this.numOfSteps = numOfSteps;
     this.valueCallback = valueCallback;
+    this.outerSlider = this.element.querySelector(".outerSlider");
     this.innerSlider = this.element.querySelector(".innerSlider");
+    this.sliderKnob = this.element.querySelector(".sliderKnob");
 
 		this.steps = [];
 		for (let stepPos = 0; stepPos < 101; stepPos+=(100/numOfSteps)) {
@@ -17,12 +19,10 @@ class Slider {
     for (let value = min; value <= max; value+=((max-min)/numOfSteps)) {
       this.values.push(value.toFixed(2));
     }
-
-    this.value = this.values[this.steps.indexOf(Number(this.innerSlider.style.width.slice(0,-1)).toFixed(2))];
-
     if (options["reverseScale"]) {
       this.values.reverse();
     }
+    this.value = this.values[this.steps.indexOf(Number(this.innerSlider.style.width.slice(0,-1)).toFixed(2))];
 
     this.element.addEventListener("mousedown", this.#grabKnob.bind(this));
     this.element.addEventListener("touchstart", this.#grabKnob.bind(this));
@@ -51,14 +51,13 @@ class Slider {
 
   #updateValue(grabEvent) {
     grabEvent.preventDefault();
-    // if (grabEvent.movementY != 0){
-		// 	return undefined;
-		// }
 
     let grabEventPageX;
 
     if (grabEvent.type == "touchstart" || grabEvent.type == "touchmove") {
       grabEventPageX = grabEvent.touches["0"].pageX;
+      this.outerSlider.classList.add("outerSliderTouched");
+      this.sliderKnob.classList.add("sliderKnobTouched");
     }
 
     if (grabEvent.type == "mousedown" || grabEvent.type == "mousemove") {
@@ -85,6 +84,9 @@ class Slider {
 
     document.removeEventListener("touchmove", this.#moveSliderListener);
     document.removeEventListener("touchend", this.#releaseKnobListener);
+
+    this.outerSlider.classList.remove("outerSliderTouched");
+    this.sliderKnob.classList.remove("sliderKnobTouched");
   }
 
 	get showSliderDetail() {

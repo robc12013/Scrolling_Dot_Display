@@ -163,17 +163,13 @@ button:disabled{
 #controls-1 {
   flex-direction: row;
 }
-
+#controls-1 button{
+  margin: auto;
+  font-size: 1.3rem;
+}
 #controls-1 button:active {
   box-shadow: inset 0px 0px 10px 0px var(--orange),
               0px 0px 5px 0px var(--cream);
-}
-
-#stopTickerButton{
-  margin-right: auto;
-}
-#updateTickerButton{
-  margin-left: auto;    
 }
 
 #speedAndSizeContainer{
@@ -215,7 +211,7 @@ button:disabled{
   background-color: #111222;
 }
 .dotOnStyle2{
-  background-color: red;
+  background-color: greenyellow;
 }
 .dotStyle3{
   border-radius: 0;
@@ -290,4 +286,14 @@ button:disabled{
     box-shadow: inset 0px 0px 5px 0px var(--orange),
                 0px 0px 5px 0px var(--cream);
   }
+}
+
+.outerSliderTouched {
+  box-shadow: inset 0px 0px 3px 0px var(--olive),
+              0px 0px 3px 0px var(--cream);
+}
+
+.sliderKnobTouched {
+  box-shadow: inset 0px 0px 5px 0px var(--orange),
+              0px 0px 5px 0px var(--cream);
 }
