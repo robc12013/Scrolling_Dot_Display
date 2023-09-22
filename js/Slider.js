@@ -9,16 +9,17 @@ class Slider {
     this.outerSlider = this.element.querySelector(".outerSlider");
     this.innerSlider = this.element.querySelector(".innerSlider");
     this.sliderKnob = this.element.querySelector(".sliderKnob");
-
 		this.steps = [];
+    this.values = [];
+
 		for (let stepPos = 0; stepPos < 101; stepPos+=(100/numOfSteps)) {
 			this.steps.push(stepPos.toFixed(2));
 		}
 
-    this.values = [];
     for (let value = min; value <= max; value+=((max-min)/numOfSteps)) {
       this.values.push(value.toFixed(2));
     }
+    
     if (options["reverseScale"]) {
       this.values.reverse();
     }
@@ -52,12 +53,13 @@ class Slider {
   #updateValue(grabEvent) {
     grabEvent.preventDefault();
 
+    this.outerSlider.classList.add("outerSliderTouched");
+    this.sliderKnob.classList.add("sliderKnobTouched");
+
     let grabEventPageX;
 
     if (grabEvent.type == "touchstart" || grabEvent.type == "touchmove") {
       grabEventPageX = grabEvent.touches["0"].pageX;
-      this.outerSlider.classList.add("outerSliderTouched");
-      this.sliderKnob.classList.add("sliderKnobTouched");
     }
 
     if (grabEvent.type == "mousedown" || grabEvent.type == "mousemove") {
